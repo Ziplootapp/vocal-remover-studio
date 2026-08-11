@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free AI Vocal Remover &amp; Music Separator Studio — ziploot.app</title>
+  <meta name="description" content="Isolate crystal-clear vocals and karaoke instrumental music tracks in 320kbps high-fidelity MP3. Powered by Meta HT-Demucs AI on ziploot.app." />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =====================================================
+       ZIPLOOT OFFICIAL DESIGN SYSTEM v6.3 — 220PX BULLETPROOF GAP
+       ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --void: #000510;
+      --panel: rgba(8, 14, 42, 0.78);
+      --panel-hard: #050c22;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-lit: rgba(129, 140, 248, 0.35);
+      --ink-0: #ffffff;
+      --ink-1: #e2e8f0;
+      --ink-2: #94a3b8;
+      --ink-3: #3d4f6b;
+      --v: #818cf8;
+      --p: #c084fc;
+      --c: #22d3ee;
+      --g: #4ade80;
+      --pk: #f472b6;
+      --grd-a: linear-gradient(135deg, #818cf8, #c084fc, #22d3ee);
+      --font-d: 'Syne', sans-serif;
+      --font-m: 'Space Mono', monospace;
+      --font-b: 'Inter', sans-serif;
+      --nav-h: 76px;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--void); }
+    ::-webkit-scrollbar-thumb { background: var(--grd-a); border-radius: 10px; }
+
+    /* Animated background glow blobs */
+    body::before, body::after {
+      content: ''; position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 0; filter: blur(100px); opacity: 0.18;
+    }
+    body::before {
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, #818cf8 0%, transparent 70%);
+      top: -200px; left: -200px;
+      animation: blobmove1 18s ease-in-out infinite alternate;
+    }
+    body::after {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, #22d3ee 0%, transparent 70%);
+      bottom: -150px; right: -150px;
+      animation: blobmove2 22s ease-in-out infinite alternate;
+    }
+    @keyframes blobmove1 { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(60px, 80px) scale(1.1); } }
+    @keyframes blobmove2 { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(-60px, -80px) scale(1.15); } }
+
+    body {
+      background: var(--void);
+      background-image: radial-gradient(circle, rgba(129, 140, 248, 0.05) 1px, transparent 1px);
+      background-size: 32px 32px;
+      color: var(--ink-2);
+      font-family: var(--font-b);
+      font-size: 15px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; transition: all 0.25s; }
+
+    .wrap { width: 100%; max-width: 960px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+    /* ── HEADER NAVBAR ───────────────────────────────── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--nav-h); z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0, 5, 16, 0.96);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-pill {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; max-width: 960px; padding: 0 20px;
+    }
+    .brand-logo {
+      font-family: var(--font-d); font-size: 24px; font-weight: 800;
+      letter-spacing: -0.8px; color: #fff; display: flex; align-items: center; gap: 8px;
+    }
+    .brand-logo span {
+      background: var(--grd-a); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .brand-tag {
+      font-family: var(--font-m); font-size: 9px; letter-spacing: 1.5px;
+      background: rgba(129, 140, 248, 0.15); color: var(--v); border: 1px solid var(--border-lit);
+      padding: 3px 8px; border-radius: 20px; text-transform: uppercase;
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
+    .nav-links a { font-family: var(--font-d); font-size: 14px; font-weight: 600; color: var(--ink-2); }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      background: var(--grd-a); color: #fff !important; font-family: var(--font-d);
+      font-size: 13px; font-weight: 700; padding: 8px 18px; border-radius: 100px;
+      box-shadow: 0 4px 20px rgba(129, 140, 248, 0.35); transition: transform 0.2s;
+    }
+    .nav-cta:hover { transform: translateY(-2px); }
+
+    /* ── MAIN CONTENT (220PX MASSIVE GAP FOR ZERO OVERLAP) ── */
+    main { padding-top: 220px !important; padding-bottom: 80px; }
+
+    .hero-section { text-align: center; margin-bottom: 44px; margin-top: 20px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-m); font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--c); background: rgba(34, 211, 238, 0.08); border: 1px solid rgba(34, 211, 238, 0.25);
+      padding: 6px 16px; border-radius: 100px; text-transform: uppercase; margin-bottom: 24px;
+    }
+    .hero-title {
+      font-family: var(--font-d); font-size: 30px; font-weight: 800; letter-spacing: -0.5px;
+      color: #fff; margin-bottom: 16px; line-height: 1.45; padding: 0 10px; margin-top: 10px;
+    }
+    .hero-title span { background: var(--grd-a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-sub { font-size: 15px; color: var(--ink-2); max-width: 640px; margin: 0 auto; line-height: 1.75; }
+
+    /* ── STUDIO CARDS ────────────────────────────────── */
+    .studio-panel {
+      background: var(--panel); backdrop-filter: blur(24px);
+      border: 1px solid var(--border-lit); border-radius: 24px;
+      padding: 32px; margin-bottom: 36px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); position: relative; overflow: hidden;
+    }
+    .studio-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--v), transparent);
+    }
+
+    .panel-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+    .panel-title { font-family: var(--font-d); font-size: 20px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; }
+    
+    .track-card {
+      background: rgba(5, 12, 34, 0.85); border: 1px solid var(--border);
+      border-radius: 16px; padding: 18px 22px; margin-top: 14px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+      transition: border-color 0.25s;
+    }
+    .track-card:hover { border-color: rgba(129, 140, 248, 0.4); }
+    .track-info strong { display: block; font-family: var(--font-d); font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .track-info span { font-family: var(--font-m); font-size: 11px; color: var(--ink-2); }
+
+    audio { outline: none; height: 36px; border-radius: 8px; width: 100%; max-width: 320px; }
+
+    .btn-dl {
+      font-family: var(--font-d); font-size: 13px; font-weight: 700;
+      padding: 10px 20px; border-radius: 100px; border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-vocal { background: var(--grd-a); color: #fff; box-shadow: 0 4px 16px rgba(129, 140, 248, 0.3); }
+    .btn-vocal:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(129, 140, 248, 0.5); }
+    
+    .btn-inst { background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3); }
+    .btn-inst:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5); }
+
+    /* ── UPLOAD DROPZONE ─────────────────────────────── */
+    .drop-zone {
+      border: 2px dashed var(--border-lit); background: rgba(5, 12, 34, 0.6);
+      border-radius: 24px; padding: 48px 24px; text-align: center; cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); margin-top: 20px;
+    }
+    .drop-zone:hover {
+      border-color: var(--c); background: rgba(8, 14, 42, 0.9); transform: translateY(-2px);
+    }
+    .drop-icon { font-size: 48px; margin-bottom: 12px; display: inline-block; filter: drop-shadow(0 0 16px rgba(129, 140, 248, 0.5)); }
+    .drop-zone h3 { font-family: var(--font-d); font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .drop-zone p { font-size: 13px; color: var(--ink-2); }
+
+    /* Loading Spinner */
+    .loading-box { display: none; text-align: center; padding: 40px 20px; }
+    .spin-ring {
+      width: 50px; height: 50px; border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--c); border-radius: 50%; margin: 0 auto 16px;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border); padding: 40px 0; text-align: center;
+      position: relative; z-index: 1; margin-top: 60px;
+    }
+    footer::before {
+      content: ''; position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+      width: 160px; height: 1px; background: var(--grd-a);
+    }
+    .footer-brand { font-family: var(--font-d); font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+    .footer-brand span { background: var(--grd-a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .footer-text { font-family: var(--font-m); font-size: 11px; color: var(--ink-3); letter-spacing: 0.5px; }
+  </style>
+</head>
+<body>
+
+  <!-- Header Navigation -->
+  <header>
+    <div class="nav-pill">
+      <a href="https://ziploot.vercel.app/" class="brand-logo">
+        ziploot<span>.app</span>
+        <span class="brand-tag">AI STUDIO</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="https://ziploot.vercel.app/">Home</a></li>
+        <li><a href="https://ziploot.vercel.app/#posts">Tools</a></li>
+        <li><a href="http://localhost:5001" style="color:#fff;">Vocal Separator</a></li>
+        <li><a href="https://ziploot.vercel.app/" class="nav-cta">ziploot.app</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Hero Header with generous 220px top clearance gap -->
+    <div class="hero-section">
+      <div class="hero-badge">⚡ META HT-DEMUCS DEEP LEARNING MODEL</div>
+      <h1 class="hero-title">Free AI Vocal &amp; Music Separator Studio <span>ziploot.app</span></h1>
+      <p class="hero-sub">Isolate crystal-clear vocals and karaoke instrumental music tracks in 320kbps high-fidelity MP3. Powered by Meta HT-Demucs AI on ziploot.app.</p>
+    </div>
+
+    <!-- Official Demo Section: Aaj Ki Raat Stree 2 Stems -->
+    <div class="studio-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">🔥 Featured Demo: Aaj Ki Raat (Stree 2)</h2>
+        <span class="brand-tag" style="background:rgba(74, 222, 128, 0.15); color:var(--g); border-color:rgba(74, 222, 128, 0.3);">PROCESSED BY META DEMUCS AI</span>
+      </div>
+      <p style="font-size:13px; color:var(--ink-2); margin-bottom:16px;">Verified AI output from track: <code>ZipLoot-Aaj-Ki-Raat---Full-Song--Stree.mp3</code></p>
+
+      <!-- Isolated Vocals Track -->
+      <div class="track-card">
+        <div class="track-info">
+          <strong style="color:var(--v);">🎙️ Aaj Ki Raat — Isolated Pure Vocals</strong>
+          <span>320kbps High Quality MP3 • 5.6 MB • ziploot.app</span>
+        </div>
+        <audio controls src="/outputs/htdemucs/input_converted/vocals_320k.mp3"></audio>
+        <a class="btn-dl btn-vocal" href="/outputs/htdemucs/input_converted/vocals_320k.mp3" download="aaj_ki_raat_vocals_ziploot.mp3">
+          ⬇️ Download Vocals
+        </a>
+      </div>
+
+      <!-- Isolated Instrumental Track -->
+      <div class="track-card">
+        <div class="track-info">
+          <strong style="color:var(--g);">🎸 Aaj Ki Raat — Isolated Karaoke &amp; Instrumental Beats</strong>
+          <span>320kbps High Quality MP3 • 5.6 MB • ziploot.app</span>
+        </div>
+        <audio controls src="/outputs/htdemucs/input_converted/instrumental_320k.mp3"></audio>
+        <a class="btn-dl btn-inst" href="/outputs/htdemucs/input_converted/instrumental_320k.mp3" download="aaj_ki_raat_instrumental_ziploot.mp3">
+          ⬇️ Download Music
+        </a>
+      </div>
+    </div>
+
+    <!-- Upload Workspace -->
+    <div class="studio-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">🎵 Upload Your Own Song</h2>
+        <span class="brand-tag">MP3 / WAV / M4A / AAC</span>
+      </div>
+
+      <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+        <div class="drop-icon">🎼</div>
+        <h3>Drag &amp; Drop Any Song Here</h3>
+        <p>Or click to select an audio file from your device (Max size: 50 MB)</p>
+        <input type="file" id="file-input" accept="audio/*" style="display:none" onchange="uploadSongToZiPlootAI(this.files[0])">
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-box" id="loading-box">
+        <div class="spin-ring"></div>
+        <h3 style="font-family:var(--font-d); font-size:18px; color:var(--c); margin-bottom:4px;">🧠 Meta HT-Demucs AI Processing...</h3>
+        <p style="font-size:13px; color:var(--ink-2);">Separating vocals &amp; converting to 320kbps MP3 on ziploot.app. (Takes ~20-40 sec)</p>
+      </div>
+
+      <!-- Dynamic Result Container for Uploaded Songs -->
+      <div id="upload-result-container" style="display:none; margin-top:24px;">
+        <div style="border-top:1px solid var(--border); padding-top:20px; margin-bottom:14px;">
+          <h3 id="res-song-name" style="font-family:var(--font-d); font-size:18px; color:#fff;">🎉 AI Separation Complete!</h3>
+        </div>
+
+        <div class="track-card">
+          <div class="track-info">
+            <strong style="color:var(--v);">🎙️ Isolated Vocals Stem</strong>
+            <span>320kbps MP3 • ziploot.app AI</span>
+          </div>
+          <audio id="res-vocal-audio" controls></audio>
+          <a id="res-vocal-dl" class="btn-dl btn-vocal" download="vocals_ziploot.mp3">⬇️ Download Vocals</a>
+        </div>
+
+        <div class="track-card">
+          <div class="track-info">
+            <strong style="color:var(--g);">🎸 Isolated Instrumental Stem</strong>
+            <span>320kbps MP3 • ziploot.app AI</span>
+          </div>
+          <audio id="res-inst-audio" controls></audio>
+          <a id="res-inst-dl" class="btn-dl btn-inst" download="instrumental_ziploot.mp3">⬇️ Download Music</a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-brand">ziploot<span>.app</span></div>
+      <p class="footer-text">© 2026 ziploot.app — Free Automated Developer Tools, Web Apps &amp; AI Utilities.</p>
+    </div>
+  </footer>
+
+  <script>
+    function uploadSongToZiPlootAI(file) {
+      if (!file) return;
+
+      document.getElementById('loading-box').style.display = 'block';
+      document.getElementById('upload-result-container').style.display = 'none';
+
+      console.log('Sending song to ziploot.app AI server:', file.name, file.size, 'bytes');
+
+      fetch('/api/separate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/octet-stream' },
+        body: file
+      })
+      .then(res => {
+        if (!res.ok) throw new Error('Server error ' + res.status);
+        return res.json();
+      })
+      .then(data => {
+        document.getElementById('loading-box').style.display = 'none';
+        document.getElementById('upload-result-container').style.display = 'block';
+        document.getElementById('res-song-name').innerText = '🎉 Isolated Stems: ' + file.name;
+
+        const vAudio = document.getElementById('res-vocal-audio');
+        const iAudio = document.getElementById('res-inst-audio');
+
+        vAudio.src = data.vocals_url + '?t=' + Date.now();
+        iAudio.src = data.instrumental_url + '?t=' + Date.now();
+
+        document.getElementById('res-vocal-dl').href = data.vocals_url;
+        document.getElementById('res-inst-dl').href = data.instrumental_url;
+      })
+      .catch(err => {
+        alert('ziploot.app AI Separation Error: ' + err.message);
+        document.getElementById('loading-box').style.display = 'none';
+      });
+    }
+  </script>
+</body>
+</html>
